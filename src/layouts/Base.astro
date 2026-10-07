@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site.js';
+const { title = `${site.name} | ${site.title}`, description = site.description } = Astro.props;
+const same = [site.linkedin, site.github].filter(Boolean);
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Person', name: site.name, jobTitle: site.title, url: site.url,
+  worksFor: { '@type': 'Organization', name: 'ECM Automation Networks' },
+  homeLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: 'Sudbury', addressRegion: 'ON', addressCountry: 'CA' } },
+  ...(same.length ? { sameAs: same } : {}),
+};
+const nav = [['Snapshot', '#snapshot'], ['Capabilities', '#capabilities'], ['Projects', '#projects'], ['Experience', '#experience'], ['Credentials', '#credentials'], ['Approach', '#approach']];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={site.url + '/'} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#0D1520" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={site.domain} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={site.url + '/'} />
+  <meta name="twitter:card" content="summary" />
+  <script is:inline>
+    (function () {
+      var t; try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="brand" href="#top" aria-label={`${site.domain}, back to top`}>{site.domain}</a>
+      <nav aria-label="Primary">
+        <ul>{nav.map(([l, h]) => <li><a href={h}>{l}</a></li>)}</ul>
+      </nav>
+      <button id="theme" class="icon-btn" type="button" aria-label="Switch colour theme">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c-5 1-10-4-9-9z" fill="currentColor" /></svg>
+      </button>
+    </div>
+  </header>
+  <main id="main"><slot /></main>
+  <footer class="foot"><div class="wrap">
+    <p>{site.name} · {site.location}</p>
+    <p>Static site, no cookies, no analytics, no trackers.</p>
+  </div></footer>
+  <script is:inline>
+    document.getElementById('theme').addEventListener('click', function () {
+      var r = document.documentElement, n = r.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      r.setAttribute('data-theme', n); try { localStorage.setItem('theme', n); } catch (e) {}
+    });
+  </script>
+</body>
+</html>

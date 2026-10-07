@@ -1,0 +1,26 @@
+---
+// Illustrative only: generic layers of a multi-site network, not a real diagram.
+---
+<figure class="topo">
+  <svg viewBox="0 0 520 250" role="img" aria-labelledby="topo-t topo-d">
+    <title id="topo-t">Generic multi-site network layout</title>
+    <desc id="topo-d">Two sites connect through an edge layer to identity, monitoring, and backup and recovery services.</desc>
+    <g class="links" fill="none" stroke-width="2">
+      <path pathLength="1" d="M144 72 C170 72 170 122 196 122" />
+      <path pathLength="1" d="M144 172 C170 172 170 122 196 122" />
+      <path pathLength="1" d="M308 122 C342 122 342 52 376 52" />
+      <path pathLength="1" d="M308 122 H376" />
+      <path pathLength="1" d="M308 122 C342 122 342 192 376 192" />
+    </g>
+    <g class="nodes">
+      <rect x="16" y="50" width="128" height="44" rx="8" /><text x="80" y="77">Industrial site</text>
+      <rect x="16" y="150" width="128" height="44" rx="8" /><text x="80" y="177">Enterprise site</text>
+      <rect x="196" y="100" width="112" height="44" rx="8" class="hub" /><text x="252" y="127">Edge + VPN</text>
+      <rect x="376" y="30" width="128" height="44" rx="8" /><text x="440" y="57">Identity</text>
+      <rect x="376" y="100" width="128" height="44" rx="8" /><text x="440" y="127">Monitoring + SIEM</text>
+      <rect x="376" y="170" width="128" height="44" rx="8" /><text x="440" y="197">Backup + recovery</text>
+    </g>
+    <circle class="pulse" cx="296" cy="112" r="5" />
+  </svg>
+  <figcaption>Illustrative layers I work across. Not a real network diagram.</figcaption>
+</figure>

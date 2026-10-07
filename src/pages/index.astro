@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import Topology from '../components/Topology.astro';
+import { site, snapshot, capabilities, projects, roles, certs, statusLabel, education, principles } from '../data/site.js';
+const profile = [site.linkedin && { l: 'Connect on LinkedIn', h: site.linkedin }, site.github && { l: 'View my GitHub', h: site.github }].filter(Boolean);
+const layers = [...new Set(capabilities.map((c) => c.layer))];
+---
+<Base>
+  <section id="top" class="hero wrap" aria-labelledby="h1">
+    <div class="hero-copy">
+      <p class="status"><span class="dot" aria-hidden="true"></span>{site.location}</p>
+      <h1 id="h1">{site.name}</h1>
+      <p class="role">{site.title}</p>
+      <p class="lede">{site.tagline}</p>
+      <p>{site.intro}</p>
+      <p class="cta">
+        <a class="btn primary" href="#projects">Explore my work</a>
+        {site.resumeUrl
+          ? <a class="btn" href={site.resumeUrl}>View my résumé</a>
+          : <a class="btn" href="#experience">See my experience</a>}
+        {profile.map((p) => <a class="btn" href={p.h} target="_blank" rel="noopener noreferrer">{p.l}</a>)}
+      </p>
+    </div>
+    <Topology />
+  </section>
+
+  <section id="snapshot" class="wrap sec" aria-labelledby="h-snap">
+    <h2 id="h-snap">Professional snapshot</h2>
+    <div class="prose">{snapshot.map((p) => <p>{p}</p>)}</div>
+  </section>
+
+  <section id="capabilities" class="wrap sec" aria-labelledby="h-cap">
+    <h2 id="h-cap">Capability map</h2>
+    <p class="sub">Grouped by where each skill sits in the stack. Everything listed is something I use or have configured in my work or projects.</p>
+    {layers.map((layer) => (
+      <div class="layer">
+        <h3>{layer}</h3>
+        <div class="rows">
+          {capabilities.filter((c) => c.layer === layer).map((c) => (
+            <article class="cap">
+              <h4>{c.title}</h4>
+              <ul class="tags">{c.items.map((i) => <li>{i}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section id="projects" class="wrap sec" aria-labelledby="h-proj">
+    <h2 id="h-proj">Selected projects</h2>
+    <p class="sub">Applied work and research. Each card states only what was done; fuller write-ups will be added over time.</p>
+    <div class="grid">
+      {projects.map((p) => (
+        <article class="card">
+          <h3>{p.title}</h3>
+          <dl>
+            <dt>Objective</dt><dd>{p.objective}</dd>
+            <dt>My role</dt><dd>{p.role}</dd>
+            <dt>Outcome</dt><dd>{p.outcome}</dd>
+          </dl>
+          <ul class="tags">{p.stack.map((s) => <li>{s}</li>)}</ul>
+          <p class="note">
+            {p.link ? <a href={p.link} target="_blank" rel="noopener noreferrer">Read the case study</a> : 'Detailed write-up to come.'}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="experience" class="wrap sec" aria-labelledby="h-exp">
+    <h2 id="h-exp">Experience</h2>
+    <ol class="timeline">
+      {roles.map((r) => (
+        <li class="role-item">
+          <article>
+            <h3>{r.title}</h3>
+            <p class="meta">{r.org} · {r.place} · <time>{r.dates}</time></p>
+            <ul class="bul">{r.lead.map((b) => <li>{b}</li>)}</ul>
+            {r.more.length > 0 && (
+              <details>
+                <summary>Show {r.more.length} more responsibilities</summary>
+                <ul class="bul">{r.more.map((b) => <li>{b}</li>)}</ul>
+              </details>
+            )}
+            <ul class="tags">{r.tech.map((t) => <li>{t}</li>)}</ul>
+          </article>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section id="credentials" class="wrap sec" aria-labelledby="h-cred">
+    <h2 id="h-cred">Certifications and education</h2>
+    <div class="two">
+      <div>
+        <h3>Certifications</h3>
+        <ul class="certs">
+          {certs.map((c) => (
+            <li><span>{c.name}</span><span class={`badge ${c.status}`}>{statusLabel[c.status]}</span></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3>Education</h3>
+        <ul class="certs">
+          {education.map((e) => <li><span><strong>{e.name}</strong><br />{e.org}</span><span class="when">{e.when}</span></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="approach" class="wrap sec" aria-labelledby="h-app">
+    <h2 id="h-app">How I approach infrastructure</h2>
+    <ul class="principles">
+      {principles.map((p) => <li><h3>{p.t}</h3><p>{p.d}</p></li>)}
+    </ul>
+  </section>
+
+  <section id="resume" class="wrap sec" aria-labelledby="h-res">
+    <h2 id="h-res">Résumé</h2>
+    {site.resumeUrl
+      ? <p><a class="btn primary" href={site.resumeUrl} download>Download résumé (PDF)</a></p>
+      : <p class="sub">A public version of my résumé will be available here.</p>}
+  </section>
+
+  <section id="connect" class="wrap sec" aria-labelledby="h-con">
+    <h2 id="h-con">Connect</h2>
+    <p class="sub">Interested in infrastructure, networking, automation, or reliable systems? Connect with me through my professional profiles. Based in {site.location}.</p>
+    {profile.length > 0
+      ? <p class="cta">{profile.map((p, i) => <a class={`btn ${i === 0 ? 'primary' : ''}`} href={p.h} target="_blank" rel="noopener noreferrer">{p.l}</a>)}</p>
+      : <p class="note">Professional profile links are coming soon.</p>}
+  </section>
+</Base>
